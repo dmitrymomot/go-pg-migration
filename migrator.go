@@ -25,15 +25,14 @@ func CreateSchema(db *pg.DB, models ...interface{}) error {
 }
 
 func createTable(db *pg.Tx, model interface{}) error {
-	err := db.CreateTable(model, &orm.CreateTableOptions{
+	if err := db.CreateTable(model, &orm.CreateTableOptions{
 		IfNotExists:   true,
 		FKConstraints: true,
-	})
-	if err != nil {
+	}); err != nil {
 		return err
 	}
 
-	if err = handleTagCpg(db, model, nil); err != nil {
+	if err := handleTagCpg(db, model, nil); err != nil {
 		return err
 	}
 
